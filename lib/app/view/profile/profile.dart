@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'package:chat_app/app/utils/components/profilepageshimmer.dart';
 import 'package:chat_app/app/utils/components/showimage.dart';
+import 'package:chat_app/app/utils/components/snackbar.dart';
 import 'package:chat_app/app/view/root/root.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -438,6 +439,8 @@ class _ProfileState extends State<Profile> {
                               onpress: () {
                                 BlocProvider.of<ProfileBloc>(context)
                                     .add(LouOutEvent());
+                                showCustomSnackBar(context, "Success!",
+                                    "Logged out successfully!");
                               },
                               icon: Iconsax.logout_1,
                               color: Colors.lightBlueAccent,
