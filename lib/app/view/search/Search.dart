@@ -223,7 +223,10 @@ class _SearchState extends State<Search> {
                   searchResult[index]['email'],
                   style: GoogleFonts.poppins(),
                 ),
-                trailing: const Icon(Ionicons.chatbox_ellipses_outline),
+                trailing: const Icon(
+                  EneftyIcons.message_2_outline,
+                  size: 25,
+                ),
               ),
             ),
           );

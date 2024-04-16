@@ -2,6 +2,7 @@ import 'package:chat_app/app/utils/animation/styles/fadeanimation.dart';
 import 'package:chat_app/app/view/chatScreen/chatScreen.dart';
 import 'package:chat_app/app/utils/animation/styles/app_colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:enefty_icons/enefty_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
@@ -99,21 +100,21 @@ class _ContactsState extends State<Contacts> {
                         padding: const EdgeInsets.only(top: 15),
                         child: FadeInAnimation(
                           delay: 1.5,
-                          child: ListTile(
-                            leading: InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ChatScreen(
-                                      friendId: data['uid'],
-                                      friendName: data['name'],
-                                      friendImage: data['image'],
-                                    ),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ChatScreen(
+                                    friendId: data['uid'],
+                                    friendName: data['name'],
+                                    friendImage: data['image'],
                                   ),
-                                );
-                              },
-                              child: Container(
+                                ),
+                              );
+                            },
+                            child: ListTile(
+                              leading: Container(
                                 width: 55,
                                 height: 65,
                                 decoration: BoxDecoration(
@@ -124,36 +125,22 @@ class _ContactsState extends State<Contacts> {
                                   ),
                                 ),
                               ),
-                            ),
-                            title: Text(
-                              data['name'],
-                              style: GoogleFonts.poppins(
-                                fontSize: 18,
+                              title: Text(
+                                data['name'],
+                                style: GoogleFonts.poppins(
+                                  fontSize: 18,
+                                ),
                               ),
-                            ),
-                            subtitle: Text(
-                              data['email'],
-                              style: GoogleFonts.poppins(
-                                fontSize: 12,
+                              subtitle: Text(
+                                data['email'],
+                                style: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                ),
                               ),
-                            ),
-                            trailing: const Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  CupertinoIcons.phone_circle_fill,
-                                  size: 35,
-                                  color: Color.fromARGB(255, 9, 48, 79),
-                                ),
-                                SizedBox(
-                                  width: 13,
-                                ),
-                                Icon(
-                                  CupertinoIcons.videocam_circle_fill,
-                                  size: 35,
-                                  color: Color.fromARGB(255, 9, 48, 79),
-                                ),
-                              ],
+                              trailing: Icon(
+                                EneftyIcons.message_2_outline,
+                                size: 25,
+                              ),
                             ),
                           ),
                         ),
