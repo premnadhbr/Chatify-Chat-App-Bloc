@@ -53,8 +53,7 @@ class _MessageTextFieldState extends State<MessageTextField> {
               color: AppColors.primaryColor,
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(30), topRight: Radius.circular(30))),
-          child: Expanded(
-              child: Column(
+          child: Column(
             children: [
               TextFormField(
                 controller: controller,
@@ -176,15 +175,12 @@ class _MessageTextFieldState extends State<MessageTextField> {
                     ),
               ),
               showEmojiPicker
-                  ? SizedBox(
-                      height: 300,
-                      child: EmojiPicker(
-                        textEditingController: controller,
-                      ),
+                  ? EmojiPicker(
+                      textEditingController: controller,
                     )
                   : const SizedBox.shrink()
             ],
-          )),
+          ),
         );
       },
     );

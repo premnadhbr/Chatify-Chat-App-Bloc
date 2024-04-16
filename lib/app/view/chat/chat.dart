@@ -1,7 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: sort_child_properties_last, avoid_unnecessary_containers, unnecessary_overrides
-
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chat_app/app/utils/components/ConnectionMessageWidget.dart';
+import 'package:chat_app/app/utils/components/customfloatingactionbutton.dart';
+import 'package:chat_app/app/utils/components/deleteChatAlertDialog.dart';
+import 'package:chat_app/app/utils/components/messageappbar.dart';
 import 'package:chat_app/app/utils/components/skelton.dart';
 import 'package:chat_app/app/utils/animation/styles/app_colors.dart';
 import 'package:chat_app/app/utils/animation/widgets/scalefade_animation.dart';
@@ -52,129 +55,7 @@ class _ChatsState extends State<Chats> {
         backgroundColor: const Color(0xFFf0f8ff),
         body: Stack(
           children: [
-            LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-                if (constraints.maxHeight < 720) {
-                  return Container(
-                    height: MediaQuery.of(context).size.height * 0.9,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.primaryColor,
-                          blurStyle: BlurStyle.outer,
-                          blurRadius: 1,
-                        )
-                      ],
-                      border: Border.all(color: AppColors.primaryColor),
-                      color: AppColors.primaryColor,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          children: [
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Iconsax.menu5,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const Spacer(),
-                            Text(
-                              "Messages",
-                              style: GoogleFonts.montserrat(
-                                color: Colors.white,
-                                fontSize: 26,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            const Spacer(),
-                            IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Iconsax.notification,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  );
-                } else {
-                  return Container(
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.primaryColor,
-                          blurStyle: BlurStyle.outer,
-                          blurRadius: 1,
-                        )
-                      ],
-                      border: Border.all(color: AppColors.primaryColor),
-                      color: AppColors.primaryColor,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        Row(
-                          children: [
-                            const SizedBox(
-                              width: 30,
-                            ),
-                            IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Iconsax.menu5,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const Spacer(),
-                            IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Iconsax.notification,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 40, top: 0, bottom: 10),
-                          child: Text(
-                            "Messages",
-                            style: GoogleFonts.montserrat(
-                                color: Colors.white,
-                                fontSize: 26,
-                                fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-              },
-            ),
+            MessageAppbar(),
             Positioned(
               bottom: -height / 4,
               left: 0,
@@ -197,34 +78,7 @@ class _ChatsState extends State<Chats> {
                   builder: (context, AsyncSnapshot snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data.docs.length < 1) {
-                        return Center(
-                            child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            FittedBox(
-                              child: Text(
-                                "Stay Connected with your friends 👋",
-                                style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 32, vertical: 8),
-                              child: Text(
-                                "Start your journey of connection. Build friendships,       share moments Stay connected with your friends. 🌟",
-                                style: GoogleFonts.openSans(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                          ],
-                        ));
+                        return ConnectionMessageWidget();
                       }
                       return ListView.separated(
                         separatorBuilder: (context, index) => Divider(
@@ -260,222 +114,189 @@ class _ChatsState extends State<Chats> {
                                               .withOpacity(.0),
                                           width: 0.5,
                                         ),
-                                        // borderRadius:
-                                        //     BorderRadius.circular(30),
                                       ),
                                       child: ListTile(
-                                        onLongPress: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return AlertDialog(
-                                                title: Text(
-                                                  'Delete Chat',
-                                                  style: GoogleFonts.poppins(
-                                                      fontSize: 20),
-                                                ),
-                                                content: Text(
-                                                  'Are you sure you want to delete this Chat?',
-                                                  style: GoogleFonts.poppins(),
-                                                ),
-                                                actions: [
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                    child: Text(
-                                                      'Cancel',
-                                                      style:
-                                                          GoogleFonts.poppins(),
+                                          onLongPress: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return DeleteChatAlertDialog(
+                                                    friendId: friendId,
+                                                    userId: user!.uid);
+                                              },
+                                            );
+                                          },
+                                          leading: SizedBox(
+                                            width: 60,
+                                            height: 70,
+                                            child: Stack(
+                                              children: [
+                                                Positioned(
+                                                  top: 0,
+                                                  bottom: 0,
+                                                  left: 0,
+                                                  right: 0,
+                                                  child: Container(
+                                                    width: 70,
+                                                    height: 70,
+                                                    clipBehavior:
+                                                        Clip.antiAlias,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15),
                                                     ),
-                                                  ),
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      BlocProvider.of<ChatBloc>(
-                                                              context)
-                                                          .add(ChattedFriendDeleteEvent(
-                                                              currentUid:
-                                                                  user!.uid,
-                                                              friendId:
-                                                                  friendId));
-                                                    },
-                                                    child: Text(
-                                                      'Delete',
-                                                      style:
-                                                          GoogleFonts.poppins(),
-                                                    ),
-                                                  ),
-                                                ],
-                                              );
-                                            },
-                                          );
-                                        },
-                                        leading: SizedBox(
-                                          width: 60,
-                                          height: 70,
-                                          child: Stack(
-                                            children: [
-                                              Positioned(
-                                                top: 0,
-                                                bottom: 0,
-                                                left: 0,
-                                                right: 0,
-                                                child: Container(
-                                                  width: 70,
-                                                  height: 70,
-                                                  clipBehavior: Clip.antiAlias,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15),
-                                                  ),
-                                                  child: friend['image'] != null
-                                                      ? CachedNetworkImage(
-                                                          fit: BoxFit.cover,
-                                                          imageUrl:
-                                                              friend['image'],
-                                                          placeholder: (conteext,
-                                                                  url) =>
-                                                              CircularProgressIndicator(
-                                                            color: AppColors
-                                                                .primaryColor,
-                                                            strokeWidth: 3,
+                                                    child: friend['image'] !=
+                                                            null
+                                                        ? CachedNetworkImage(
+                                                            fit: BoxFit.cover,
+                                                            imageUrl:
+                                                                friend['image'],
+                                                            placeholder: (conteext,
+                                                                    url) =>
+                                                                CircularProgressIndicator(
+                                                              color: AppColors
+                                                                  .primaryColor,
+                                                              strokeWidth: 3,
+                                                            ),
+                                                            errorWidget:
+                                                                (context, url,
+                                                                        error) =>
+                                                                    const Icon(
+                                                              Icons.error,
+                                                            ),
+                                                            height: 70,
+                                                          )
+                                                        : const Center(
+                                                            child: Icon(Iconsax
+                                                                .profile),
                                                           ),
-                                                          errorWidget: (context,
-                                                                  url, error) =>
-                                                              const Icon(
-                                                            Icons.error,
-                                                          ),
-                                                          height: 70,
-                                                        )
-                                                      : const Center(
-                                                          child: Icon(
-                                                              Iconsax.profile),
-                                                        ),
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        title: Text(
-                                          friend['name'],
-                                          style: GoogleFonts.archivo(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                        subtitle: Container(
-                                          child: lastMsg == "photo"
-                                              ? Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.end,
-                                                  children: [
-                                                    Icon(
-                                                      Icons.photo,
-                                                      size: 20,
-                                                      color: AppColors.darkGrey,
-                                                    ),
-                                                    SizedBox(width: 5),
-                                                    Text(
-                                                      'photo',
-                                                      style:
-                                                          GoogleFonts.poppins(
-                                                              fontSize: 13),
-                                                    )
-                                                  ],
-                                                )
-                                              : lastMsg == "location"
-                                                  ? Row(
+                                          title: Text(
+                                            friend['name'],
+                                            style: GoogleFonts.archivo(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                          subtitle: Container(
+                                            child: lastMsg == "photo"
+                                                ? Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.end,
+                                                    children: [
+                                                      Icon(
+                                                        Icons.photo,
+                                                        size: 20,
+                                                        color:
+                                                            AppColors.darkGrey,
+                                                      ),
+                                                      SizedBox(width: 5),
+                                                      Text(
+                                                        'photo',
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                                fontSize: 13),
+                                                      )
+                                                    ],
+                                                  )
+                                                : lastMsg == "location"
+                                                    ? Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .end,
+                                                        children: [
+                                                            Icon(
+                                                              Ionicons.location,
+                                                              size: 20,
+                                                              color: AppColors
+                                                                  .darkGrey,
+                                                            ),
+                                                            SizedBox(width: 5),
+                                                            Text('location',
+                                                                style: GoogleFonts
+                                                                    .poppins(
+                                                                        fontSize:
+                                                                            13))
+                                                          ])
+                                                    : Text('$lastMsg',
+                                                        style:
+                                                            GoogleFonts.archivo(
+                                                                color:
+                                                                    Colors.grey,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500),
+                                                        overflow: TextOverflow
+                                                            .ellipsis),
+                                          ),
+                                          trailing: StreamBuilder(
+                                            stream: FirebaseFirestore.instance
+                                                .collection('Users')
+                                                .doc(user!.uid)
+                                                .collection('messages')
+                                                .doc(friendId)
+                                                .collection('chats')
+                                                .orderBy('date',
+                                                    descending: true)
+                                                .snapshots(),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasData) {
+                                                final docs =
+                                                    snapshot.data!.docs;
+                                                if (docs.isNotEmpty) {
+                                                  final lastMessageDoc =
+                                                      docs.first;
+                                                  final currentTime =
+                                                      lastMessageDoc['date'];
+                                                  lastMessageTime =
+                                                      timeago.format(
+                                                          currentTime.toDate());
+                                                  return Column(
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
                                                               .end,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
                                                       children: [
-                                                          Icon(
-                                                            Ionicons.location,
-                                                            size: 20,
-                                                            color: AppColors
-                                                                .darkGrey,
-                                                          ),
-                                                          SizedBox(width: 5),
-                                                          Text('location',
-                                                              style: GoogleFonts
-                                                                  .poppins(
-                                                                      fontSize:
-                                                                          13))
-                                                        ])
-                                                  : Text('$lastMsg',
-                                                      style:
-                                                          GoogleFonts.archivo(
-                                                              color:
-                                                                  Colors.grey,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500),
-                                                      overflow: TextOverflow
-                                                          .ellipsis),
-                                        ),
-                                        trailing: StreamBuilder(
-                                          stream: FirebaseFirestore.instance
-                                              .collection('Users')
-                                              .doc(user!.uid)
-                                              .collection('messages')
-                                              .doc(friendId)
-                                              .collection('chats')
-                                              .orderBy('date', descending: true)
-                                              .snapshots(),
-                                          builder: (context, snapshot) {
-                                            if (snapshot.hasData) {
-                                              final docs = snapshot.data!.docs;
-                                              if (docs.isNotEmpty) {
-                                                final lastMessageDoc =
-                                                    docs.first;
-                                                final currentTime =
-                                                    lastMessageDoc['date'];
-                                                lastMessageTime =
-                                                    timeago.format(
-                                                        currentTime.toDate());
-                                                return Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment.end,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Text(
-                                                        lastMessageTime!,
-                                                        style:
-                                                            GoogleFonts.poppins(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500,
-                                                                color:
-                                                                    Colors.grey,
-                                                                fontSize: 10),
-                                                      ),
-                                                      const SizedBox(
-                                                          height: 10),
-                                                    ]);
-                                              } else {
-                                                return const SizedBox();
+                                                        Text(lastMessageTime!,
+                                                            style: GoogleFonts
+                                                                .poppins(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                    color: Colors
+                                                                        .grey,
+                                                                    fontSize:
+                                                                        10)),
+                                                        const SizedBox(
+                                                            height: 10),
+                                                      ]);
+                                                } else {
+                                                  return const SizedBox();
+                                                }
                                               }
-                                            }
-                                            return const SizedBox();
-                                          },
-                                        ),
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ChatScreen(
-                                                        friendId: friend['uid'],
-                                                        friendName:
-                                                            friend['name'],
-                                                        friendImage:
-                                                            friend['image']),
-                                              ));
-                                        },
-                                      ),
+                                              return const SizedBox();
+                                            },
+                                          ),
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ChatScreen(
+                                                          friendId:
+                                                              friend['uid'],
+                                                          friendName:
+                                                              friend['name'],
+                                                          friendImage:
+                                                              friend['image']),
+                                                ));
+                                          }),
                                     ),
                                   ),
                                 );
@@ -487,33 +308,15 @@ class _ChatsState extends State<Chats> {
                       );
                     }
                     return Center(
-                      child: CircularProgressIndicator(
-                          color: AppColors.primaryColor),
-                    );
+                        child: CircularProgressIndicator(
+                            color: AppColors.primaryColor));
                   },
                 ),
               ),
             ),
           ],
         ),
-        floatingActionButton: Container(
-          decoration: BoxDecoration(
-              border: Border.all(color: AppColors.primaryColor),
-              color: AppColors.primaryColor,
-              borderRadius: const BorderRadius.all(Radius.circular(100))),
-          height: 70,
-          width: 70,
-          child: FloatingActionButton(
-            elevation: 2,
-            onPressed: () {
-              BlocProvider.of<ChatBloc>(context)
-                  .add(NavigateToSearchPageEvent());
-            },
-            child: const Icon(Iconsax.add, size: 35),
-            backgroundColor: AppColors.primaryColor,
-            shape: const CircleBorder(),
-          ),
-        ),
+        floatingActionButton: CustomFloatingActionButton(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
     );

@@ -35,8 +35,6 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   User? user = FirebaseAuth.instance.currentUser;
 
-  // bool deletingMessages = false;
-
   @override
   Widget build(BuildContext context) {
     return BlocListener<ChatBloc, ChatState>(
@@ -106,7 +104,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                   DeleteConversationEvent(
                                       currentUid: user!.uid,
                                       friendId: widget.friendId));
-                              // await deleteConversation();
                               Navigator.of(context).pop();
                             },
                             child: Text('Delete', style: GoogleFonts.poppins()),
@@ -202,6 +199,7 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ),
         body: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Expanded(
               child: Container(
