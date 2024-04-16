@@ -23,6 +23,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<CameraImagesSentEvent>(cameraImagesSentEvent);
     on<VideoCallButtonClickedEvent>(videoCallButtonClickedEvent);
     on<ChattedFriendDeleteEvent>(chattedFriendDeleteEvent);
+    on<DeleteConversationEvent>(deleteConversationEvent);
   }
 
   FutureOr<void> chatShareEvent(
@@ -327,6 +328,41 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       emit(ChattedUserDeletedState());
     } catch (e) {
       print(e);
+    }
+  }
+
+  FutureOr<void> deleteConversationEvent(
+      DeleteConversationEvent event, Emitter<ChatState> emit) async {
+    try {
+      await deleteConversation(event.friendId, event.currentUid);
+    } catch (e) {
+      print('Error deleting conversation: $e');
+    }
+  }
+
+  Future<void> deleteConversation(String friendId, String currentUid) async {
+    try {
+      CollectionReference<Map<String, dynamic>> collectionReference =
+          FirebaseFirestore.instance
+              .collection('Users')
+              .doc(currentUid)
+              .collection('messages')
+              .doc(friendId)
+              .collection('chats');
+
+      // Fetch the documents within the collection
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await collectionReference.get();
+
+      // Delete each document one by one
+      for (QueryDocumentSnapshot<Map<String, dynamic>> doc
+          in querySnapshot.docs) {
+        await doc.reference.delete();
+      }
+
+      print('Documents deleted successfully.');
+    } catch (e) {
+      print('Error deleting documents: $e');
     }
   }
 }

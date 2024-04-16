@@ -34,7 +34,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   User? user = FirebaseAuth.instance.currentUser;
 
-  bool deletingMessages = false;
+  // bool deletingMessages = false;
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +66,6 @@ class _ChatScreenState extends State<ChatScreen> {
                   BlocProvider.of<ChatBloc>(context).add(
                       VideoCallButtonClickedEvent(friendId: widget.friendId));
                 },
-                // icon: const Icon(Ionicons.videocam_outline)),
                 icon: const Icon(
                   Iconsax.video4,
                   color: Colors.white,
@@ -77,7 +76,6 @@ class _ChatScreenState extends State<ChatScreen> {
                   BlocProvider.of<ChatBloc>(context).add(
                       VideoCallButtonClickedEvent(friendId: widget.friendId));
                 },
-                // icon: const Icon(Ionicons.videocam_outline)),
                 icon: const Icon(
                   Iconsax.call,
                   color: Colors.white,
@@ -89,48 +87,28 @@ class _ChatScreenState extends State<ChatScreen> {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: Text(
-                          'Delete Conversation',
-                          style: GoogleFonts.poppins(fontSize: 20),
-                        ),
+                        title: Text('Delete Conversation',
+                            style: GoogleFonts.poppins(fontSize: 20)),
                         content: Text(
-                          'Are you sure you want to delete this Conversations?',
-                          style: GoogleFonts.poppins(),
-                        ),
+                            'Are you sure you want to delete this Conversations?',
+                            style: GoogleFonts.poppins()),
                         actions: [
                           TextButton(
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: Text(
-                              'Cancel',
-                              style: GoogleFonts.poppins(),
-                            ),
+                            child: Text('Cancel', style: GoogleFonts.poppins()),
                           ),
                           TextButton(
                             onPressed: () async {
-                              setState(() {
-                                deletingMessages = true;
-                              });
-                              await deleteConversation();
-
-                              setState(() {
-                                deletingMessages = false;
-                              });
+                              BlocProvider.of<ChatBloc>(context).add(
+                                  DeleteConversationEvent(
+                                      currentUid: user!.uid,
+                                      friendId: widget.friendId));
+                              // await deleteConversation();
                               Navigator.of(context).pop();
                             },
-                            child: deletingMessages
-                                ? SizedBox(
-                                    height: 30,
-                                    width: 30,
-                                    child: CircularProgressIndicator(
-                                      color: AppColors.primaryColor,
-                                    ),
-                                  )
-                                : Text(
-                                    'Delete',
-                                    style: GoogleFonts.poppins(),
-                                  ),
+                            child: Text('Delete', style: GoogleFonts.poppins()),
                           ),
                         ],
                       );
@@ -147,14 +125,12 @@ class _ChatScreenState extends State<ChatScreen> {
             children: [
               GestureDetector(
                 onTap: () {
-                  print(widget.friendImage);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ShowImage(
-                            message: widget.friendImage,
-                            imageUrl: widget.friendImage),
-                      ));
+                          builder: (context) => ShowImage(
+                              message: widget.friendImage,
+                              imageUrl: widget.friendImage)));
                 },
                 child: SizedBox(
                   height: 50,
@@ -184,9 +160,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                   ),
                                   height: 50,
                                 )
-                              : const Center(
-                                  child: Icon(Iconsax.profile),
-                                ),
+                              : const Center(child: Icon(Iconsax.profile)),
                         ),
                       ),
                       Positioned(
@@ -223,13 +197,6 @@ class _ChatScreenState extends State<ChatScreen> {
                       fontWeight: FontWeight.w600),
                 ),
               ),
-              // Text(
-              //   "Online",
-              //   style: GoogleFonts.poppins(
-              //       color: Colors.green,
-              //       fontSize: 12,
-              //       fontWeight: FontWeight.w600),
-              // )
             ],
           ),
         ),
@@ -237,7 +204,6 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             Expanded(
               child: Container(
-                // height: MediaQuery.sizeOf(context).height,
                 padding: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
                 decoration: BoxDecoration(
                   boxShadow: [
@@ -374,32 +340,5 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
       ),
     );
-  }
-
-  Future<void> deleteConversation() async {
-    try {
-      // Get a reference to the collection
-      CollectionReference<Map<String, dynamic>> collectionReference =
-          FirebaseFirestore.instance
-              .collection('Users')
-              .doc(user!.uid)
-              .collection('messages')
-              .doc(widget.friendId)
-              .collection('chats');
-
-      // Fetch the documents within the collection
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await collectionReference.get();
-
-      // Delete each document one by one
-      for (QueryDocumentSnapshot<Map<String, dynamic>> doc
-          in querySnapshot.docs) {
-        await doc.reference.delete();
-      }
-
-      print('Documents deleted successfully.');
-    } catch (e) {
-      print('Error deleting documents: $e');
-    }
   }
 }

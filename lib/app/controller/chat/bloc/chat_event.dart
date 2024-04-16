@@ -57,7 +57,6 @@ class CameraImagesSentEvent extends ChatEvent {
   });
 }
 
-
 class VideoCallButtonClickedEvent extends ChatEvent {
   final String friendId;
   VideoCallButtonClickedEvent({
@@ -72,4 +71,11 @@ class ChattedFriendDeleteEvent extends ChatEvent {
     required this.currentUid,
     required this.friendId,
   });
+}
+
+class DeleteConversationEvent extends ChatEvent {
+  final String currentUid;
+  final String friendId;
+
+  DeleteConversationEvent({required this.currentUid, required this.friendId});
 }
