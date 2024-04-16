@@ -85,8 +85,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 )),
             IconButton(
                 onPressed: () {
-                  // deleteConversation();
-                  // Navigator.of(context).pop();
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_app/app/controller/status/bloc/status_bloc.dart';
 import 'package:chat_app/app/utils/components/statusTextPage.dart';
 import 'package:chat_app/app/utils/animation/styles/app_colors.dart';
@@ -223,11 +224,26 @@ class _StatusState extends State<Status> {
                                                     padding:
                                                         const EdgeInsets.all(
                                                             2.0),
-                                                    child: CircleAvatar(
-                                                      backgroundImage:
-                                                          NetworkImage(
-                                                              image ?? ''),
-                                                      radius: 30,
+                                                    child: CachedNetworkImage(
+                                                      imageUrl: image ?? '',
+                                                      placeholder: (context,
+                                                              url) =>
+                                                          CircularProgressIndicator(
+                                                        color: AppColors
+                                                            .primaryColor,
+                                                      ), // Placeholder widget while loading
+                                                      errorWidget: (context,
+                                                              url, error) =>
+                                                          Icon(Icons
+                                                              .error), // Error widget if image fails to load
+                                                      imageBuilder: (context,
+                                                              imageProvider) =>
+                                                          CircleAvatar(
+                                                        backgroundImage:
+                                                            imageProvider,
+                                                        radius: 30,
+                                                      ),
+                                                      fit: BoxFit.cover,
                                                     ),
                                                   ),
                                                 ),
