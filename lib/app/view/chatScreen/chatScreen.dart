@@ -2,6 +2,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_app/app/controller/chat/bloc/chat_bloc.dart';
 import 'package:chat_app/app/utils/components/message_textfield.dart';
+import 'package:chat_app/app/utils/components/profileintro.dart';
 import 'package:chat_app/app/utils/components/showimage.dart';
 import 'package:chat_app/app/utils/components/single_message.dart';
 import 'package:chat_app/app/utils/animation/styles/app_colors.dart';
@@ -231,64 +232,9 @@ class _ChatScreenState extends State<ChatScreen> {
                   builder: (context, AsyncSnapshot snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data.docs.length < 1) {
-                        return Center(
-                          child: Column(
-                            children: [
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Container(
-                                height: 140,
-                                width: 140,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    boxShadow: const [
-                                      BoxShadow(
-                                          color: Colors.grey,
-                                          blurRadius: 80,
-                                          spreadRadius: 2,
-                                          blurStyle: BlurStyle.outer)
-                                    ],
-                                    gradient: LinearGradient(
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                        colors: [
-                                          Colors.teal.withOpacity(0.5),
-                                          Colors.purple.withOpacity(0.5),
-                                        ])),
-                                clipBehavior: Clip.antiAlias,
-                                child: Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: CircleAvatar(
-                                      backgroundImage:
-                                          NetworkImage(widget.friendImage),
-                                    )),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              RichText(
-                                  text: TextSpan(children: [
-                                TextSpan(
-                                    text: "Say hii to  ",
-                                    style: GoogleFonts.poppins(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w600)),
-                                TextSpan(
-                                    text: widget.friendName,
-                                    style: GoogleFonts.poppins(
-                                        fontSize: 32,
-                                        color: Colors.blue.withOpacity(0.4),
-                                        fontWeight: FontWeight.w600)),
-                              ])),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Text("Start Chatting to know more about him 😊 ",
-                                  style: GoogleFonts.poppins())
-                            ],
-                          ),
+                        return ProfileIntroduction(
+                          friendName: widget.friendName,
+                          friendImage: widget.friendImage,
                         );
                       }
                       return ListView.builder(
