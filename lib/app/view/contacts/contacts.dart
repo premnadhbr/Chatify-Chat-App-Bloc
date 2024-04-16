@@ -3,6 +3,7 @@ import 'package:chat_app/app/view/chatScreen/chatScreen.dart';
 import 'package:chat_app/app/utils/animation/styles/app_colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enefty_icons/enefty_icons.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
@@ -96,6 +97,10 @@ class _ContactsState extends State<Contacts> {
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       final data = snapshot.data!.docs[index];
+                      if (data['uid'] ==
+                          FirebaseAuth.instance.currentUser!.uid) {
+                        return SizedBox.shrink();
+                      }
                       return Padding(
                         padding: const EdgeInsets.only(top: 15),
                         child: FadeInAnimation(
