@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
 part 'profile_event.dart';
@@ -20,7 +21,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<ProfileDataCancelEvent>(profileDataCancelEvent);
     on<ProfileImageUpdateEvent>(profileImageUpdateEvent);
     on<ProfileSaveToDbEvent>(profileSaveToDbEvent);
-     on<DeleteButtonClickedEvent>(deleteButtonClickedEvent);
+    on<DeleteButtonClickedEvent>(deleteButtonClickedEvent);
   }
 
   FutureOr<void> louOutEvent(LouOutEvent event, Emitter<ProfileState> emit) {
@@ -73,7 +74,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       final pickedFile =
           await imagePicker.pickImage(source: ImageSource.gallery);
 
-      if (pickedFile != null) { 
+      if (pickedFile != null) {
         emit(ProfileImagePickedSuccessState(image: File(pickedFile.path)));
       } else {
         emit(ProfileImagePickedErrorState());
@@ -105,12 +106,62 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     }
   }
 
+  // FutureOr<void> deleteButtonClickedEvent(
+  //     DeleteButtonClickedEvent event, Emitter<ProfileState> emit) async {
+  //   User? user = FirebaseAuth.instance.currentUser;
 
-  FutureOr<void> deleteButtonClickedEvent(
+  //   try {
+  //     QuerySnapshot<Map<String, dynamic>> usersSnapshot =
+  //         await FirebaseFirestore.instance.collection('Users').get();
+
+  //     for (QueryDocumentSnapshot<Map<String, dynamic>> userSnapshot
+  //         in usersSnapshot.docs) {
+  //       String userId = userSnapshot.id;
+
+  //       // Delete messages document for current user
+  //       await FirebaseFirestore.instance
+  //           .collection('Users')
+  //           .doc(FirebaseAuth.instance.currentUser!.uid)
+  //           .collection('messages')
+  //           .doc(userId)
+  //           .delete();
+
+  //       // Delete chats document for current user
+  //       await FirebaseFirestore.instance
+  //           .collection('Users')
+  //           .doc(userId)
+  //           .collection('messages')
+  //           .doc(FirebaseAuth.instance.currentUser!.uid)
+  //           .delete();
+  //     }
+
+  //     // Delete user account
+  //     if (user != null) {
+  //       await user.delete();
+  //       await FirebaseFirestore.instance
+  //           .collection('Users')
+  //           .doc(user.uid)
+  //           .delete();
+  //     }
+
+  //     print('User account and associated data deleted successfully');
+  //     emit(UserDeletedState());
+  //   } catch (e) {
+  //     print('Error deleting user account and associated data: $e');
+  //   }
+  // }
+
+  Future<void> deleteButtonClickedEvent(
       DeleteButtonClickedEvent event, Emitter<ProfileState> emit) async {
-    User? user = FirebaseAuth.instance.currentUser;
-
+    emit(ProfileLoadingState(isloading: true));
     try {
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user == null) {
+        emit(UserDeleteErrorState(errorMessage: "User not authenticated"));
+        return;
+      }
+
       QuerySnapshot<Map<String, dynamic>> usersSnapshot =
           await FirebaseFirestore.instance.collection('Users').get();
 
@@ -121,7 +172,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         // Delete messages document for current user
         await FirebaseFirestore.instance
             .collection('Users')
-            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .doc(user.uid)
             .collection('messages')
             .doc(userId)
             .delete();
@@ -131,23 +182,59 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
             .collection('Users')
             .doc(userId)
             .collection('messages')
-            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .doc(user.uid)
             .delete();
-      }
 
-      // Delete user account
-      if (user != null) {
-        await user.delete();
+        // Delete status documents for current user
         await FirebaseFirestore.instance
-            .collection('Users')
+            .collection('status')
             .doc(user.uid)
             .delete();
       }
 
-      print('User account and associated data deleted successfully');
+      // Check if the user needs to reauthenticate
+      final providerData = user.providerData.first;
+      if (providerData.providerId == GoogleAuthProvider().providerId) {
+        final googleSignIn = GoogleSignIn();
+        final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
+        if (googleUser != null) {
+          final GoogleSignInAuthentication googleAuth =
+              await googleUser.authentication;
+
+          final credential = GoogleAuthProvider.credential(
+            accessToken: googleAuth.accessToken,
+            idToken: googleAuth.idToken,
+          );
+
+          // Reauthenticate the user
+          await user.reauthenticateWithCredential(credential);
+        } else {
+          emit(UserDeleteErrorState(errorMessage: "Google user not available"));
+          return;
+        }
+      }
+
+      // Delete user account
+      await user.delete();
+
+      // Delete user document from Firestore
+      print('Deleting user document ${user.uid} from Firestore...');
+      await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(user.uid)
+          .delete();
+      print('User document deleted successfully');
+
       emit(UserDeletedState());
+      print('User account and associated data deleted successfully');
     } catch (e) {
-      print('Error deleting user account and associated data: $e');
+      if (e is FirebaseAuthException && e.code == 'requires-recent-login') {
+        emit(UserDeleteErrorState(
+            errorMessage: "Sign in again to delete your account."));
+      } else {
+        emit(UserDeleteErrorState(errorMessage: '$e'));
+      }
     }
   }
 }

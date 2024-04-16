@@ -74,6 +74,8 @@ class _ProfileState extends State<Profile> {
             context,
             MaterialPageRoute(builder: (context) => AuthenticationScreen()),
           );
+        } else if (state is UserDeleteErrorState) {
+          showCustomSnackBar(context, "Error", state.errorMessage);
         }
       },
       builder: (context, state) {

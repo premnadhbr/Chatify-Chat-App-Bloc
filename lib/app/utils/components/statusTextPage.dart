@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../controller/status/bloc/status_bloc.dart';
@@ -56,7 +55,7 @@ class _StatusTextPageState extends State<StatusTextPage> {
                 BlocProvider.of<StatusBloc>(context).add(ColorPick());
               },
               icon: const Icon(
-                Iconsax.colorfilter,
+                Icons.color_lens,
                 size: 30,
               ),
             ),

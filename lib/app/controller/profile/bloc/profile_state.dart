@@ -39,8 +39,21 @@ class ProfileImagePickedSuccessState extends ProfileState {
   });
 }
 
-class ProfileImagePickedErrorState extends ProfileState{}
+class ProfileImagePickedErrorState extends ProfileState {}
 
-class ProfileImageUpdatedSuccessState extends ProfileState{}
+class ProfileImageUpdatedSuccessState extends ProfileState {}
 
-class UserDeletedState extends ProfileState{}
+class UserDeletedState extends ProfileState {}
+
+class UserDeleteErrorState implements ProfileState {
+  final String errorMessage;
+
+  UserDeleteErrorState({required this.errorMessage});
+}
+
+class ProfileLoadingState extends ProfileState {
+  bool isloading;
+  ProfileLoadingState({
+    required this.isloading,
+  });
+}

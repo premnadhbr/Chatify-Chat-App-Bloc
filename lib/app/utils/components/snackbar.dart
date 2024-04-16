@@ -20,7 +20,7 @@ void showCustomSnackBar(BuildContext context, String title, String message) {
             ),
             child: Row(
               children: [
-                const SizedBox(width: 48),
+                const SizedBox(width: 45),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,7 +37,7 @@ void showCustomSnackBar(BuildContext context, String title, String message) {
                         style: GoogleFonts.poppins(
                             fontSize: 12, color: Colors.white),
                         overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
+                        maxLines: 1,
                       ),
                     ],
                   ),
@@ -48,8 +48,8 @@ void showCustomSnackBar(BuildContext context, String title, String message) {
           Positioned(
             bottom: 0,
             child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(20)),
+              borderRadius:
+                  const BorderRadius.only(bottomLeft: Radius.circular(20)),
               child: SvgPicture.asset(
                 'assets/images/bubbles.svg',
                 height: 48,
