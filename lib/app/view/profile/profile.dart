@@ -1,10 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, prefer_const_constructors, unnecessary_string_interpolations, unnecessary_brace_in_string_interps, unnecessary_null_comparison, unused_local_variable
 // ignore_for_file: unrelated_type_equality_checks, camel_case_types
 import 'dart:io';
+import 'package:chat_app/app/utils/animation/styles/app_colors.dart';
 import 'package:chat_app/app/utils/components/profilepageshimmer.dart';
 import 'package:chat_app/app/utils/components/showimage.dart';
 import 'package:chat_app/app/utils/components/snackbar.dart';
+import 'package:chat_app/app/view/contactUs/contactus.dart';
 import 'package:chat_app/app/view/root/root.dart';
+import 'package:enefty_icons/enefty_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -13,6 +16,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:chat_app/app/controller/profile/bloc/profile_bloc.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 class Profile extends StatefulWidget {
@@ -447,6 +451,20 @@ class _ProfileState extends State<Profile> {
                               icon: Iconsax.logout_1,
                               color: Colors.lightBlueAccent,
                             ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            ProfileMenuWidget(
+                                title: 'Contact Us',
+                                icon: Icons.contact_support,
+                                onpress: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ContactUs(),
+                                      ));
+                                },
+                                color: AppColors.primaryColor),
                             SizedBox(
                               height: 5,
                             ),
