@@ -317,7 +317,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   FutureOr<void> chattedFriendDeleteEvent(
-      ChattedFriendDeleteEvent event, Emitter<ChatState> emit) {
+      ChattedFriendDeleteEvent event, Emitter<ChatState> emit) async {
     try {
       FirebaseFirestore.instance
           .collection('Users')
@@ -326,6 +326,23 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           .doc(event.friendId)
           .delete();
       emit(ChattedUserDeletedState());
+      CollectionReference<Map<String, dynamic>> collectionReference =
+          FirebaseFirestore.instance
+              .collection('Users')
+              .doc(event.currentUid)
+              .collection('messages')
+              .doc(event.friendId)
+              .collection('chats');
+
+      // Fetch the documents within the collection
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await collectionReference.get();
+
+      // Delete each document one by one
+      for (QueryDocumentSnapshot<Map<String, dynamic>> doc
+          in querySnapshot.docs) {
+        await doc.reference.delete();
+      }
     } catch (e) {
       print(e);
     }

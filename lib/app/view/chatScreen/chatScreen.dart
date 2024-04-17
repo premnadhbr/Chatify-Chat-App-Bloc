@@ -34,7 +34,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   User? user = FirebaseAuth.instance.currentUser;
-
+  bool _isDeletingMessages = false;
   @override
   Widget build(BuildContext context) {
     return BlocListener<ChatBloc, ChatState>(
@@ -81,7 +81,10 @@ class _ChatScreenState extends State<ChatScreen> {
                   size: 26,
                 )),
             IconButton(
-                onPressed: () {
+                onPressed: () async {
+                  setState(() {
+                    _isDeletingMessages = true;
+                  });
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
