@@ -470,9 +470,7 @@ class _ProfileState extends State<Profile> {
                             ),
                             ProfileMenuWidget(
                               title: 'Invite Friend',
-                              onpress: () {
-                                // Share.share("com.example.myapp");
-                              },
+                              onpress: () {},
                               icon: Iconsax.share,
                               color: Colors.orange,
                             ),
