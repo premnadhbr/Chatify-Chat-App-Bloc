@@ -75,11 +75,11 @@ class AboutApp extends StatelessWidget {
                               height: 14,
                             ),
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 5),
                               child: Text(
-                                "Welcome to Chatify, where connecting with your loved ones is effortless. Chatify lets you chat instantly, share images, locations, and emojis to express yourself vividly. Start sharing joy with your friends and family on Chatify today!",
-                                style: GoogleFonts.aDLaMDisplay(
+                                "Welcome to Chatify! 🎉 Connect effortlessly with your loved ones. 💬 Chat instantly, share images 📷, locations 📍, and emojis 😊 to express yourself vividly. Start sharing joy with your friends and family on Chatify today!",
+                                style: GoogleFonts.lato(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w400,
                                 ),
