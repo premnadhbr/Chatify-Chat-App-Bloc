@@ -90,7 +90,6 @@ class _ProfileState extends State<Profile> {
           id = state.id;
 
           generatecolor(imageUrl!);
-
           return Scaffold(
             body: LayoutBuilder(
               builder: (context, constraints) => Column(

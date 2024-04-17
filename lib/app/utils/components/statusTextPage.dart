@@ -83,6 +83,7 @@ class _StatusTextPageState extends State<StatusTextPage> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => DisplayImageScreen(
+                          userImage: widget.image,
                           imagePath: pickedFile.path,
                           userId: user!.uid,
                           userName: widget.name,

@@ -57,26 +57,17 @@ class AboutApp extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(
-                              height: 14,
-                            ),
                             Padding(
-                              padding: const EdgeInsets.only(left: 23),
-                              child: Text(
-                                "Chatify",
-                                style: GoogleFonts.poppins(
-                                  fontSize: 24,
-                                  color: AppColors.primaryColor,
-                                  fontWeight: FontWeight.w700,
-                                ),
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.asset(
+                                'assets/images/Chatify.jpg',
+                                fit: BoxFit.contain,
                               ),
-                            ),
-                            SizedBox(
-                              height: 14,
                             ),
                             Padding(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 5),
+                                horizontal: 16,
+                              ),
                               child: Text(
                                 "Welcome to Chatify! 🎉 Connect effortlessly with your loved ones. 💬 Chat instantly, share images 📷, locations 📍, and emojis 😊 to express yourself vividly. Start sharing joy with your friends and family on Chatify today!",
                                 style: GoogleFonts.lato(

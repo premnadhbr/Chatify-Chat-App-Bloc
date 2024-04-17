@@ -10,11 +10,13 @@ class DisplayImageScreen extends StatefulWidget {
   final String imagePath;
   final String userId;
   final String userName;
+  final String userImage;
 
   const DisplayImageScreen({
     required this.imagePath,
     required this.userId,
     required this.userName,
+    required this.userImage,
   });
 
   @override
@@ -54,7 +56,7 @@ class _DisplayImageScreenState extends State<DisplayImageScreen> {
                     .doc(widget.userId)
                     .set({
                   "uid": widget.userId,
-                  'image': imageUrl,
+                  'image': widget.userImage,
                   'name': widget.userName,
                   'dataType': 'image',
                 });

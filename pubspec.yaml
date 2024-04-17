@@ -89,9 +89,9 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/images/chatify-high-resolution-logo (1).png"
+  image_path: "assets/images/preman.jpg"
   adaptive_icon_background: "#9717ef"
-  adaptive_icon_foreground: "assets/images/play_store_512.png"
+  adaptive_icon_foreground: "assets/images/preman.jpg"
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
