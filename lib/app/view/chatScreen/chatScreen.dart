@@ -34,7 +34,6 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   User? user = FirebaseAuth.instance.currentUser;
-  bool _isDeletingMessages = false;
   @override
   Widget build(BuildContext context) {
     return BlocListener<ChatBloc, ChatState>(
@@ -42,6 +41,8 @@ class _ChatScreenState extends State<ChatScreen> {
         if (state is VideoCallWorkingState) {
           sendPushNotification(state.token, state.name);
         } else if (state is ChattedUserDeletedState) {
+          Navigator.pop(context);
+        } else if (state is ConversationsDeletedDoneState) {
           Navigator.pop(context);
         }
       },
@@ -81,10 +82,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   size: 26,
                 )),
             IconButton(
-                onPressed: () async {
-                  setState(() {
-                    _isDeletingMessages = true;
-                  });
+                onPressed: () {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
@@ -102,12 +100,11 @@ class _ChatScreenState extends State<ChatScreen> {
                             child: Text('Cancel', style: GoogleFonts.poppins()),
                           ),
                           TextButton(
-                            onPressed: () async {
+                            onPressed: () {
                               BlocProvider.of<ChatBloc>(context).add(
                                   DeleteConversationEvent(
                                       currentUid: user!.uid,
                                       friendId: widget.friendId));
-                              Navigator.of(context).pop();
                             },
                             child: Text('Delete', style: GoogleFonts.poppins()),
                           ),

@@ -24,3 +24,5 @@ class VideoCallWorkingState extends ChatState {
   });
 }
 class ChattedUserDeletedState extends ChatState{}
+
+class ConversationsDeletedDoneState extends ChatState{}

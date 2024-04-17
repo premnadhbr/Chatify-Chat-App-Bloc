@@ -352,6 +352,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       DeleteConversationEvent event, Emitter<ChatState> emit) async {
     try {
       await deleteConversation(event.friendId, event.currentUid);
+      // emit(ChattedUserDeletedState());
+      emit(ConversationsDeletedDoneState());
     } catch (e) {
       print('Error deleting conversation: $e');
     }
