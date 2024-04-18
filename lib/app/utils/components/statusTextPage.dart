@@ -121,6 +121,7 @@ class _StatusTextPageState extends State<StatusTextPage> {
                     "uid": user!.uid,
                     'image': widget.image,
                     'name': widget.name,
+                    'dataType': "text",
                   });
                   FirebaseFirestore.instance
                       .collection('status')
@@ -129,17 +130,18 @@ class _StatusTextPageState extends State<StatusTextPage> {
                       .doc()
                       .set({
                     "Data": datacontroller.text,
+                    'dataType': "text",
                     'color': backgroundColor.value,
                     'timestamp': DateTime.now().toUtc(),
                   });
-                  Future.delayed(const Duration(hours: 24), () {
+                  Future.delayed(const Duration(seconds: 24), () {
                     FirebaseFirestore.instance
                         .collection('status')
                         .doc(user!.uid)
                         .collection('status')
                         .where('timestamp',
                             isLessThan: DateTime.now()
-                                .subtract(const Duration(hours: 24)))
+                                .subtract(const Duration(seconds: 24)))
                         .get()
                         .then((QuerySnapshot querySnapshot) {
                       querySnapshot.docs.forEach((doc) {

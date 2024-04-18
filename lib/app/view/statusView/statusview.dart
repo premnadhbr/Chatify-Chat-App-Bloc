@@ -35,32 +35,47 @@ class StatusViewPage extends StatelessWidget {
 
           final List<DocumentSnapshot> documents = snapshot.data!.docs;
 
+          if (documents.isEmpty) {
+            // Handle case where no data is available
+            return Center(
+                child: Text(
+              'No data available',
+              style: GoogleFonts.poppins(),
+            ));
+          }
+
+          List<StoryItem> storyItems = [];
+
+          for (var document in documents) {
+            final Map<String, dynamic> data =
+                document.data() as Map<String, dynamic>;
+            final String dataType = data['dataType'] ?? '';
+
+            if (dataType == "image") {
+              storyItems.add(
+                StoryItem.inlineImage(
+                  url: data['Data'],
+                  controller: StoryController(),
+                ),
+              );
+            } else {
+              storyItems.add(
+                StoryItem.text(
+                  shown: true,
+                  duration: const Duration(seconds: 3),
+                  title: data['Data'],
+                  textStyle: GoogleFonts.poppins(fontSize: 18),
+                  backgroundColor: Color(
+                    document['color'],
+                  ),
+                ),
+              );
+            }
+          }
+
           return StoryView(
             indicatorForegroundColor: AppColors.primaryColor,
-            storyItems: List.generate(
-              documents.length,
-              (index) {
-                final Map<String, dynamic> data =
-                    documents[index].data() as Map<String, dynamic>;
-                final String dataType = data['dataType'] ?? '';
-                if (dataType == "image") {
-                  return StoryItem.inlineImage(
-                    url: data['Data'],
-                    controller: StoryController(),
-                  );
-                } else {
-                  return StoryItem.text(
-                    shown: true,
-                    duration: const Duration(seconds: 3),
-                    title: data['Data'],
-                    textStyle: GoogleFonts.poppins(fontSize: 18),
-                    backgroundColor: Color(
-                      documents[index]['color'],
-                    ),
-                  );
-                }
-              },
-            ),
+            storyItems: storyItems,
             onComplete: () {
               Navigator.pop(context);
             },
