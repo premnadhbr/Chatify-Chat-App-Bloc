@@ -72,14 +72,14 @@ class _DisplayImageScreenState extends State<DisplayImageScreen> {
                   'timestamp': DateTime.now().toUtc(),
                 });
 
-                Future.delayed(const Duration(seconds: 24), () {
+                Future.delayed(const Duration(hours: 24), () {
                   FirebaseFirestore.instance
                       .collection('status')
                       .doc(widget.userId)
                       .collection('status')
                       .where('timestamp',
                           isLessThan: DateTime.now()
-                              .subtract(const Duration(seconds: 24)))
+                              .subtract(const Duration(hours: 24)))
                       .get()
                       .then((QuerySnapshot querySnapshot) {
                     querySnapshot.docs.forEach((doc) {
