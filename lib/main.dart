@@ -105,7 +105,7 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  await Future.delayed(Duration(seconds: 4));
+  await Future.delayed(Duration(seconds: 3));
   FlutterNativeSplash.remove();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
