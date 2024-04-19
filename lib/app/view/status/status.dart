@@ -319,7 +319,7 @@ class _StatusState extends State<Status> {
                               final documents = snapshot.data!.docs;
                               return ListView.builder(
                                 shrinkWrap: true,
-                                itemCount: documents.length,
+                                itemCount: documents.length ?? 0,
                                 itemBuilder: (context, index) {
                                   final data = documents[index];
                                   if (data.id != user?.uid) {
