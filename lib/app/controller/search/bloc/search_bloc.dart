@@ -25,6 +25,11 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           .get();
       String currentUserName = currentUserDoc['name'];
 
+      if (searchTerm.isEmpty) {
+        emit(SearchError(error: "Search field is empty."));
+        return;
+      }
+
       if (searchTerm.toLowerCase() == currentUserName.toLowerCase()) {
         emit(SearchUserNotFound(message: "You cannot search for yourself"));
         return;

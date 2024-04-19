@@ -52,8 +52,5 @@ class UserDeleteErrorState implements ProfileState {
 }
 
 class ProfileLoadingState extends ProfileState {
-  bool isloading;
-  ProfileLoadingState({
-    required this.isloading,
-  });
+  
 }

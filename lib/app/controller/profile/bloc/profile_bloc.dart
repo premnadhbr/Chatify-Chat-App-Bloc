@@ -108,7 +108,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   Future<void> deleteButtonClickedEvent(
       DeleteButtonClickedEvent event, Emitter<ProfileState> emit) async {
-    emit(ProfileLoadingState(isloading: true));
+    emit(ProfileLoadingState());
     try {
       User? user = FirebaseAuth.instance.currentUser;
 
@@ -154,6 +154,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           .delete();
       print('User document deleted successfully');
 
+      emit(UserDeletedState());
+
       for (QueryDocumentSnapshot<Map<String, dynamic>> userSnapshot
           in usersSnapshot.docs) {
         String userId = userSnapshot.id;
@@ -181,7 +183,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
             .delete();
       }
 
-      emit(UserDeletedState());
       print('User account and associated data deleted successfully');
     } catch (e) {
       if (e is FirebaseAuthException && e.code == 'requires-recent-login') {

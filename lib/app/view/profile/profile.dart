@@ -7,7 +7,6 @@ import 'package:chat_app/app/utils/components/showimage.dart';
 import 'package:chat_app/app/utils/components/snackbar.dart';
 import 'package:chat_app/app/view/contactUs/contactus.dart';
 import 'package:chat_app/app/view/root/root.dart';
-import 'package:enefty_icons/enefty_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -16,7 +15,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:chat_app/app/controller/profile/bloc/profile_bloc.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 class Profile extends StatefulWidget {

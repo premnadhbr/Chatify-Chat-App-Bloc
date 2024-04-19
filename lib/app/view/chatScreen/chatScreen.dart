@@ -73,8 +73,8 @@ class _ChatScreenState extends State<ChatScreen> {
                 )),
             IconButton(
                 onPressed: () {
-                  BlocProvider.of<ChatBloc>(context).add(
-                      VideoCallButtonClickedEvent(friendId: widget.friendId));
+                  // BlocProvider.of<ChatBloc>(context).add(
+                  //     VideoCallButtonClickedEvent(friendId: widget.friendId));
                 },
                 icon: const Icon(
                   Iconsax.call,
