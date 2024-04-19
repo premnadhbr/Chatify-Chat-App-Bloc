@@ -7,6 +7,7 @@ import 'package:chat_app/app/utils/components/showimage.dart';
 import 'package:chat_app/app/utils/components/snackbar.dart';
 import 'package:chat_app/app/view/contactUs/contactus.dart';
 import 'package:chat_app/app/view/root/root.dart';
+import 'package:chat_app/app/view/splashScreen/splash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -16,6 +17,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:chat_app/app/controller/profile/bloc/profile_bloc.dart';
 import 'package:palette_generator/palette_generator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -67,15 +69,27 @@ class _ProfileState extends State<Profile> {
           });
         }
         if (state is LogoutDoneState) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => AuthenticationScreen()),
-          );
+          SharedPreferences.getInstance().then((sharedPref) {
+            sharedPref.setBool(SplashScreenState.keyLogin, false).then((_) {
+              var value = sharedPref.getBool(SplashScreenState.keyLogin);
+              print('Value set to false: $value');
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => AuthenticationScreen()),
+              );
+            });
+          });
         } else if (state is UserDeletedState) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => AuthenticationScreen()),
-          );
+          SharedPreferences.getInstance().then((sharedPref) {
+            sharedPref.setBool(SplashScreenState.keyLogin, false).then((_) {
+              var value = sharedPref.getBool(SplashScreenState.keyLogin);
+              print('Value set to false: $value');
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => AuthenticationScreen()),
+              );
+            });
+          });
         } else if (state is UserDeleteErrorState) {
           showCustomSnackBar(context, "Error", state.errorMessage);
         }
@@ -427,7 +441,7 @@ class _ProfileState extends State<Profile> {
                             ),
                             ProfileMenuWidget(
                               title: 'Delete Account',
-                              onpress: () {
+                              onpress: () async {
                                 BlocProvider.of<ProfileBloc>(context)
                                     .add(DeleteButtonClickedEvent());
                               },
@@ -439,7 +453,7 @@ class _ProfileState extends State<Profile> {
                             ),
                             ProfileMenuWidget(
                               title: 'Logout',
-                              onpress: () {
+                              onpress: () async {
                                 BlocProvider.of<ProfileBloc>(context)
                                     .add(LouOutEvent());
                                 showCustomSnackBar(context, "Success!",

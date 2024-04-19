@@ -2,16 +2,16 @@
 // ignore_for_file: library_private_types_in_public_api, sort_child_properties_last
 import 'dart:io';
 import 'package:awesome_widgets/awesome_widgets.dart';
-import 'package:chat_app/app/utils/constants/app_theme.dart';
 import 'package:chat_app/app/utils/animation/styles/app_colors.dart';
+import 'package:chat_app/app/view/splashScreen/splash.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:enefty_icons/enefty_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:chat_app/app/controller/auth/bloc/auth_bloc.dart';
-import 'package:chat_app/app/utils/constants/text_constants.dart';
 import 'package:chat_app/app/view/home/home.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UploadProfile extends StatefulWidget {
   final String name;
@@ -46,11 +46,16 @@ class _UploadProfileState extends State<UploadProfile> {
           ScaffoldMessenger.of(context)
               .showSnackBar(const SnackBar(content: Text('Done...')));
         } else if (state is UserDataUpdatedState) {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Home(),
-              ));
+          SharedPreferences.getInstance().then((sharedPref) {
+            sharedPref.setBool(SplashScreenState.keyLogin, true).then((_) {
+              var value = sharedPref.getBool(SplashScreenState.keyLogin);
+              print('Value set to true: $value');
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => Home()),
+              );
+            });
+          });
         } else if (state is UserDataUpdateErrorState) {
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(state.error)));

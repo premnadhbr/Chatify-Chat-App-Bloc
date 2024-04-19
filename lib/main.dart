@@ -1,5 +1,4 @@
-// ignore_for_file: avoid_print
-
+// ignore_for_file: avoid_print, unnecessary_import
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:chat_app/app/controller/auth/bloc/auth_bloc.dart';
 import 'package:chat_app/app/controller/chat/bloc/chat_bloc.dart';
@@ -10,10 +9,8 @@ import 'package:chat_app/app/controller/status/bloc/status_bloc.dart';
 import 'package:chat_app/app/utils/agora/callpage.dart';
 import 'package:chat_app/app/utils/constants/app_theme.dart';
 import 'package:chat_app/app/utils/constants/notification.dart';
-import 'package:chat_app/app/view/home/home.dart';
-import 'package:chat_app/app/view/onboard/onboard.dart';
+import 'package:chat_app/app/view/splashScreen/splash.dart';
 import 'package:chat_app/firebase_options.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -152,16 +149,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        home: StreamBuilder(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Home();
-            } else {
-              return OnBoardScreen();
-            }
-          },
-        ),
+        home: SplashScreen(),
         theme: lightMode,
       ),
     );

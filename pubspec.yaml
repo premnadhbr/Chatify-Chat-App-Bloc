@@ -78,6 +78,7 @@ dependencies:
   custom_clippers: ^2.0.0
   flutter_svg: ^2.0.10+1
   flutter_native_splash: ^2.4.0
+  shared_preferences: ^2.2.3
   
 
   

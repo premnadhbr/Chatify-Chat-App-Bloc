@@ -60,7 +60,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
             physics: const NeverScrollableScrollPhysics(
               parent: ClampingScrollPhysics(),
             ),
-            itemCount: 3,
+            itemCount: 2,
             controller: controller,
             itemBuilder: (context, index) {
               if (index == 0) {

@@ -11,11 +11,13 @@ import 'package:chat_app/app/view/root/root.dart';
 import 'package:chat_app/app/utils/animation/styles/app_colors.dart';
 import 'package:chat_app/app/utils/animation/styles/fadeanimation.dart';
 import 'package:chat_app/app/utils/animation/styles/text_field_style.dart';
+import 'package:chat_app/app/view/splashScreen/splash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key, required this.controller});
@@ -42,11 +44,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 builder: (context) => const AuthenticationScreen(),
               ));
         } else if (state is LoggedInSuccessState) {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Home(),
-              ));
+          SharedPreferences.getInstance().then((sharedPref) {
+            sharedPref.setBool(SplashScreenState.keyLogin, true).then((_) {
+              var value = sharedPref.getBool(SplashScreenState.keyLogin);
+              print('Value set to true: $value');
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => Home()),
+              );
+            });
+          });
           showCustomSnackBar(context, "Success!", "Logged in successfully!");
         } else if (state is LoggedInErrorState) {
           ScaffoldMessenger.of(context)
@@ -55,11 +62,17 @@ class _LoginScreenState extends State<LoginScreen> {
             isLoading = false;
           });
         } else if (state is GoogleButtonState) {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Home(),
-              ));
+          SharedPreferences.getInstance().then((sharedPref) {
+            sharedPref.setBool(SplashScreenState.keyLogin, true).then((_) {
+              var value = sharedPref.getBool(SplashScreenState.keyLogin);
+              print('Value set to true: $value');
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => Home()),
+              );
+            });
+          });
+
           showCustomSnackBar(context, "Success!", "Logged in successfully!");
         } else if (state is LoginloadingState) {
           setState(() {
@@ -152,11 +165,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                 onPressed: () async {
                                   if (formKey.currentState!.validate()) {
                                     BlocProvider.of<AuthBloc>(context).add(
-                                        LoginButtonClickedEvent(
-                                            email: _emailController.text,
-                                            password: _passController.text));
+                                      LoginButtonClickedEvent(
+                                          email: _emailController.text,
+                                          password: _passController.text),
+                                    );
                                   }
-
                                   FocusManager.instance.primaryFocus?.unfocus();
                                 },
                                 child: isLoading
@@ -185,7 +198,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 SquareTile(
-                                  onTap: () {
+                                  onTap: () async {
                                     BlocProvider.of<AuthBloc>(context)
                                         .add(GoogleButtonClickedEvent());
                                   },

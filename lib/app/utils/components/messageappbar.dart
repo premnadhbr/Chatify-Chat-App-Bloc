@@ -2,6 +2,7 @@ import 'package:chat_app/app/utils/animation/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MessageAppbar extends StatelessWidget {
   const MessageAppbar({super.key});
@@ -54,7 +55,13 @@ class MessageAppbar extends StatelessWidget {
                     ),
                     const Spacer(),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        final SharedPreferences sharedPreferences =
+                            await SharedPreferences.getInstance();
+                        bool? isLogin = sharedPreferences
+                            .getBool('Login'); // retrieve the value
+                        print('Login status: $isLogin'); // print the value
+                      },
                       icon: const Icon(
                         Iconsax.notification,
                         color: Colors.white,

@@ -16,7 +16,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class Home extends StatefulWidget {
@@ -33,6 +32,7 @@ class _HomeState extends State<Home> {
     const Contacts(),
     const Profile(),
   ];
+  
   User? user = FirebaseAuth.instance.currentUser;
 
   void updateFcmToken() async {
